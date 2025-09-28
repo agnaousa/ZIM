@@ -27,8 +27,7 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}/zim-output:/zim-output \
             ghcr.io/openzim/zimit:latest \
-            --url ${{ github.event.inputs.url }} \
-            --output /zim-output
+            sh -c "zim --url '${{ github.event.inputs.url }}' --output /zim-output"
 
       - name: Upload generated ZIM
         uses: actions/upload-artifact@v4
