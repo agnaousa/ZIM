@@ -7,6 +7,10 @@ on:
         description: 'Website URL to convert to ZIM'
         required: true
         default: 'https://example.com'
+      name:
+        description: 'Name for the output ZIM file (without extension)'
+        required: true
+        default: 'website'
 
 jobs:
   generate-zim:
@@ -25,12 +29,12 @@ jobs:
       - name: Run Zimit container
         run: |
           docker run --rm \
-            -v ${{ github.workspace }}/zim-output:/zim-output \
+            -v ${{ github.workspace }}/zim-output:/output \
             ghcr.io/openzim/zimit:latest \
-            --url '${{ github.event.inputs.url }}' --output /zim-output
+            zimit --seeds '${{ github.event.inputs.url }}' --name '${{ github.event.inputs.name }}'
 
       - name: Upload generated ZIM
         uses: actions/upload-artifact@v4
         with:
           name: zim-file
-          path: ${{ github.workspace }}/zim-output
+          path: ${{ github.workspace }}/zim-output/
