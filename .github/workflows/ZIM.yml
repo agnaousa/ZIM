@@ -1,0 +1,37 @@
+name: Generate ZIM with Zimit
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'Website URL to convert to ZIM'
+        required: true
+        default: 'https://example.com'
+
+jobs:
+  generate-zim:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Pull Zimit Docker image
+        run: docker pull ghcr.io/openzim/zimit:latest
+
+      - name: Create output directory
+        run: mkdir -p ${{ github.workspace }}/zim-output
+
+      - name: Run Zimit container
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/zim-output:/zim-output \
+            ghcr.io/openzim/zimit:latest \
+            --url ${{ github.event.inputs.url }} \
+            --output /zim-output
+
+      - name: Upload generated ZIM
+        uses: actions/upload-artifact@v3
+        with:
+          name: zim-file
+          path: zim-output
