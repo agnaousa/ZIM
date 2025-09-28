@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Pull Zimit Docker image
         run: docker pull ghcr.io/openzim/zimit:latest
@@ -27,10 +27,10 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}/zim-output:/zim-output \
             ghcr.io/openzim/zimit:latest \
-            sh -c "zim --url '${{ github.event.inputs.url }}' --output /zim-output"
+            --url '${{ github.event.inputs.url }}' --output /zim-output
 
       - name: Upload generated ZIM
         uses: actions/upload-artifact@v4
         with:
           name: zim-file
-          path: zim-output
+          path: ${{ github.workspace }}/zim-output
