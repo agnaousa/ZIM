@@ -1,18 +1,13 @@
-name: Check Repository Size
+name: Check Free Storage Space
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
-  check-size:
+  check-free-space:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Calculate repository size
+      - name: Check free space on the runner
         run: |
-          size=$(du -sh . | awk '{print $1}')
-          echo "Repository size is $size"
+          echo "Checking free storage space on the runner..."
+          df -h
