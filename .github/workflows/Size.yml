@@ -1,0 +1,18 @@
+name: Check Repository Size
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-size:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Calculate repository size
+        run: |
+          size=$(du -sh . | awk '{print $1}')
+          echo "Repository size is $size"
